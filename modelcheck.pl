@@ -57,7 +57,7 @@ check(T, L, S, [], ax(F)) :-
 	checkAll(T, L, Z, [], F, F). % Check for all neighbours Z
 
 % AG F - F is satisfied in every future state
-& Success if loop is found
+% Success if loop is found
 check(T, L, S, U, ag(F)):-
 	member(S, U).
 check(T, L, S, U, ag(F)) :-
@@ -77,7 +77,7 @@ check(T, L, S, U, af(F)) :-
 check_all(_,_,[],_,_,_). % All neighbours check
 check_all(T, L, [H|T], U, X, A) :-
 	check(T, L, H, U, A), % True in the head H of the neighbour list
-	check_all(T, L, T, U, X, A). True in the head T of the neighbour list
+	check_all(T, L, T, U, X, A). %True in the head T of the neighbour list
 	
 
 
