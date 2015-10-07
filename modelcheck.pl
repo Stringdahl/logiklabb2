@@ -74,14 +74,30 @@ check(T, L, S, U, af(F)) :-
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_all(T, L, Z, [S|U], F, af(F)). % Check for all neighbours Z, Add S to recorded states U
 
-% EF - some path will satisfy F eventually
+% EG - 
+check(T, L, S, U, eg(F)):-
+	member(S, U).
+check(T, L, S, U, eg(F)) :-
+	check(T, L, S, [], F), % check if true in current state S
+	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
+	check_exist(T, L, Z, [S|U], F, eg(F)). % Check for all neighbours Z, Add S to recorded states U
+	
+
+% EF F - some path will satisfy F eventually
 check(T, L, S, U, ef(F)):-
 	\+ member(S, U).
 check(T, L, S, U, ef(F)) :-
 	check(T, L, S, [], F), % check if true in current state S
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_exist(T, L, Z, [S|U], F, ef(F)). % Check for all neighbours Z, Add S to recorded states U
-% 
+
+% EX F - 
+check(T, L, S, [], ex(F)) :-
+	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
+	check_exist(T, L, Z, [], F, F). % Check for all neighbours Z
+
+
+
 check_all(_,_,[],_,_,_). % All neighbours check
 check_all(T, L, [H|TAIL], U, X, A) :-
 	check(T, L, H, U, A), % True in the head H of the neighbour list
@@ -89,8 +105,8 @@ check_all(T, L, [H|TAIL], U, X, A) :-
 
 check_exist(_,_,[],_,_,_):- fail. %Fails if list is empty
 check_exist(T, L, [H|TAIL], U, X, A) :-
-	check(T, L, H, U, A);
-	check_exist(T, L, TAIL, U, X, A).
+	check(T, L, H, U, A); %True and the head H of the neighbour list
+	check_exist(T, L, TAIL, U, X, A). % or true in the TAIL of the neighbour list
 
 
 % EX
