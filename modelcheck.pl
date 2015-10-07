@@ -54,7 +54,7 @@ check(T, L, S, [], or(F,G)) :-
 % AX F - all next states satisfies F
 check(T, L, S, [], ax(F)) :-
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
-	checkAll(T, L, Z, [], F, F). % Check for all neighbours Z
+	check_all(T, L, Z, [], F, F). % Check for all neighbours Z
 
 % AG F - F is satisfied in every future state
 % Success if loop is found
@@ -63,7 +63,7 @@ check(T, L, S, U, ag(F)):-
 check(T, L, S, U, ag(F)) :-
 	check(T, L, S, [], F), % check if true in current state S
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
-	checkAll(T, L, Z, [S|U], F, ag(F)). % Check for all neighbours Z, Add S to recorded states U
+	check_all(T, L, Z, [S|U], F, ag(F)). % Check for all neighbours Z, Add S to recorded states U
 
 % AF F - all paths will satisfy F eventually
 % Fail if loop found
@@ -72,13 +72,25 @@ check(T, L, S, U, af(F)):-
 check(T, L, S, U, af(F)) :-
 	check(T, L, S, [], F), % check if true in current state S
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
-	checkAll(T, L, Z, [S|U], F, af(F)). % Check for all neighbours Z, Add S to recorded states U
+	check_all(T, L, Z, [S|U], F, af(F)). % Check for all neighbours Z, Add S to recorded states U
+
+% EF - some path will satisfy F eventually
+check(T, L, S, U, ef(F)):-
+	\+ member(S, U).
+check(T, L, S, U, ef(F)) :-
+	check(T, L, S, [], F), % check if true in current state S
+	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
+	check_exist(T, L, Z, [S|U], F, ef(F)). % Check for all neighbours Z, Add S to recorded states U
 % 
 check_all(_,_,[],_,_,_). % All neighbours check
-check_all(T, L, [H|T], U, X, A) :-
+check_all(T, L, [H|TAIL], U, X, A) :-
 	check(T, L, H, U, A), % True in the head H of the neighbour list
-	check_all(T, L, T, U, X, A). %True in the head T of the neighbour list
-	
+	check_all(T, L, TAIL, U, X, A). %True in the head T of the neighbour list
+
+check_exist(_,_,[],_,_,_):- fail. %Fails if list is empty
+check_exist(T, L, [H|TAIL], U, X, A) :-
+	check(T, L, H, U, A);
+	check_exist(T, L, TAIL, U, X, A).
 
 
 % EX
