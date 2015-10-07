@@ -43,13 +43,13 @@ check(_, L, S, [], neg(X)) :-
 
 % And
 check(T, L, S, [], and(F,G)) :-
-	check(_, L, S, [], F),
-	check(_, L, S, [], G).
+	check(T, L, S, [], F),
+	check(T, L, S, [], G).
 
 % Or
 check(T, L, S, [], or(F,G)) :- 
-	check(_, L, S, [], F);
-	check(_, L, S, [], G).
+	check(T, L, S, [], F);
+	check(T, L, S, [], G).
 
 % AX F - all next states satisfies F
 check(T, L, S, [], ax(F)) :-
@@ -61,6 +61,7 @@ check(T, L, S, [], ax(F)) :-
 check(T, L, S, U, ag(F)):-
 	member(S, U).
 check(T, L, S, U, ag(F)) :-
+	\+ member(S, U),
 	check(T, L, S, [], F), % check if true in current state S
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_all(T, L, Z, [S|U], F, ag(F)). % Check for all neighbours Z, Add S to recorded states U
@@ -68,9 +69,11 @@ check(T, L, S, U, ag(F)) :-
 % AF F - all paths will satisfy F eventually
 % Fail if loop found
 check(T, L, S, U, af(F)):-
-	\+ member(S, U).
-check(T, L, S, U, af(F)) :-
-	check(T, L, S, [], F), % check if true in current state S
+	\+ member(S, U),
+	check(T, L, S, [], F).
+
+check(T, L, S, U, af(F)) :- % check if true in current state S
+	\+ member(S, U),
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_all(T, L, Z, [S|U], F, af(F)). % Check for all neighbours Z, Add S to recorded states U
 
@@ -78,6 +81,7 @@ check(T, L, S, U, af(F)) :-
 check(T, L, S, U, eg(F)):-
 	member(S, U).
 check(T, L, S, U, eg(F)) :-
+	\+ member(S, U),
 	check(T, L, S, [], F), % check if true in current state S
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_exist(T, L, Z, [S|U], F, eg(F)). % Check for all neighbours Z, Add S to recorded states U
@@ -85,13 +89,14 @@ check(T, L, S, U, eg(F)) :-
 
 % EF F - some path will satisfy F eventually
 check(T, L, S, U, ef(F)):-
-	\+ member(S, U).
+	\+ member(S, U),
+	check(T, L, S, [], F). % check if true in current state S
 check(T, L, S, U, ef(F)) :-
-	check(T, L, S, [], F), % check if true in current state S
+	\+ member(S, U),
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_exist(T, L, Z, [S|U], F, ef(F)). % Check for all neighbours Z, Add S to recorded states U
 
-% EX F - 
+% EX F -
 check(T, L, S, [], ex(F)) :-
 	member([S, Z], T), % Fetch list Z of neighbors to S from tranistions T
 	check_exist(T, L, Z, [], F, F). % Check for all neighbours Z
