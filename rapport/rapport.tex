@@ -60,30 +60,24 @@ Vi har 5 olika tillstånd (\textbf{Welcome Screen, Verify, Retry, Select Amount,
 \clearpage
 \section{Specifiering}
 
-\subsection{Bevis 1 (valid)}
+\subsection{Hållbar systemegenskap}
+Det finns en stig där så småningom det går att ta ut pengar.\\
+\texttt{ef(and(and(pe,v),va))}
 
+\subsection{Ohållbar systemegenskap}
+Det finns en stig där något av nästa steg inte är välkomstskärmen.\\
+\texttt{ef(not(ex(not(pe))))}
 
-\begin{enumerate}
-	\item Rad 1
-	
-\end{enumerate}
+\section{Verifiering}
+\subsection{Systemegenskaper}
 
-\subsection{Bevis 2 (invalid)}
-
-\begin{enumerate}
-	\item Rad 1
-	
-\end{enumerate}
-
-\section{Predikat}
+\subsection{Tester}
+Modellproveraren klarade alla tester.
 
 \clearpage
 \section*{Appendix}
 \appendix
-\section{Bevis}
 
-
-\clearpage
 \section{Källkod}
 
 %\lstinputlisting[language=Prolog]{logik.pl}
