@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 
-\setlength\parindent{0pt}
+
 
 %opening
 \title{DD1350 Logik för dataloger \\ Laboration 2}
@@ -15,11 +15,51 @@
 
 \begin{document}
 
+\setlength\parindent{0pt}
 \maketitle
 
-\section{Tillvägagånggsätt}
+\section{Verktygsutveckling}
 
-\section{Torrkörning av bevis}
+\clearpage
+\section{Modellering}
+Vi valde att modellera en förenklad uttagsautomat. En användare möts först av en välkomstskärm. Användaren verifieras genom att ange sin pinkod. Om pinkoden är fel, bes användaren ange den igen. Om användaren anger rätt pinkod får ett belopp anges. Om beloppet inte kan tas ut får användaren skriva ett nytt belopp. Om beloppet finns tillgängligt tas pengarna ut och uttagsautomaten återgår till välkomstskärmen. Användaren kan även närsomhelst avbryta uttaget och återgå till välkomstskärmen.
+
+\subsection{Tillståndsgraf}
+Vi har 5 olika tillstånd (\textbf{Welcome Screen, Verify, Retry, Select Amount, Withdraw Money}) och 4 atomer (\texttt{Pin Entered, Failed, Verified, Valid Amount}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\linewidth]{modell}
+\caption{Tillståndsgraf för uttagsautomat}
+\label{fig:modell}
+\end{figure}
+
+\clearpage
+\subsection{Prolog-kompatibel representation}
+\begin{verbatim}
+% States are ws(welcome screen), ve(verify), re(retry), 
+% sa(select amount) and wm(withdraw money).
+[
+ [ws, [ve]],
+ [ve, [ws, ve, re, sa]],
+ [re, [ws, ve]],
+ [sa, [ws, sa, wm]],
+ [wm, [ws]]
+].
+
+% Labeling
+[
+ [ws, []],
+ [ve, [pe]],
+ [re, [pe, f]],
+ [sa, [pe, v]],
+ [wm, [pe, v, va]]
+].
+\end{verbatim}
+
+\clearpage
+\section{Specifiering}
+
 \subsection{Bevis 1 (valid)}
 
 
