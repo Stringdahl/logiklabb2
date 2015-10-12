@@ -19,6 +19,7 @@
 \maketitle
 
 \section{Verktygsutveckling}
+Programmet börjar med att läsa in modellen, sanningstilldelningslistan, starttillståndet samt formeln. Dessa värden skickas sedan in i ett predikat \texttt{check} tillsammans med en tom lista som håller reda på vilka tillstånd vi har besökt. check verifierar varje delformel rekursivt och börjar innerst. För att göra detta använder check sig av två hjälppredikat, \texttt{check\_all} som rekursivt kollar A-formler, samt \texttt{check\_exist} som rekursivt kollar E-formler.
 
 \clearpage
 \section{Modellering}
@@ -68,11 +69,28 @@ Det finns en stig där så småningom det går att ta ut pengar.\\
 Det finns en stig där något av nästa steg inte är välkomstskärmen.\\
 \texttt{ef(not(ex(not(pe))))}
 
+\section{Predikat}
+\begin{description}
+	\item[\texttt{verify -}] sant när bevisfilen kan läsas på ett korrekt sätt samt när formeln är sann.
+	
+	\item[\texttt{check -}] sant när formeln samt alla underliggande rekursiva anrop är sanna.
+	
+	\item[\texttt{check\_all -}] sant då basfallet gäller, dvs när grannlistan är tom. Eller när formeln gäller för alla grannar i listan.
+	
+	\item[\texttt{check\_exist -}] sant då basfallet inte gäller, dvs när grannlistan inte är tom. Eller när formeln gäller för någon granne i listan.
+	
+	\end{description}
+
 \section{Verifiering}
 \subsection{Systemegenskaper}
+\begin{description}
+	\item[Hållbar] Eftersom det finns en stig där \texttt{pe,v,a} kommer att vara sanna, nämligen i \texttt{ws} ska egenskapen returnera sant, vilket den gjorde.
+	
+	\item[Ohållbar] Eftersom alla tillstånd kan gå över till \texttt{ws} alltså då \texttt{pe} inte är sann ska egenskapen returnerna falskt, vilket den gjorde.
+\end{description}
 
-\subsection{Tester}
-Modellproveraren klarade alla tester.
+\subsection{Givna Testfall}
+Modellproveraren klarade samtliga 732 givna testfall.
 
 \clearpage
 \section*{Appendix}
@@ -80,7 +98,7 @@ Modellproveraren klarade alla tester.
 
 \section{Källkod}
 
-%\lstinputlisting[language=Prolog]{logik.pl}
+\lstinputlisting[language=Prolog]{../modelcheck.pl}
 
 
 
