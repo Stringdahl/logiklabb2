@@ -1,0 +1,15 @@
+[[ws, [ve]],
+[ve, [ws, ve, re, sa]],
+[re, [ws, ve]],
+[sa, [ws, sa, wm]],
+[wm, [ws]]].
+
+[[ws, []],
+[ve, [pe]],
+[re, [pe, f]],
+[sa, [pe, v]],
+[wm, [pe, v, va]]].
+
+ws.
+
+ef(not(ex(not(pe)))).
